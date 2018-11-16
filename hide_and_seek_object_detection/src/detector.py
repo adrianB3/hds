@@ -49,16 +49,18 @@ class Detector:
         # actual detection in current frame
         self.compute_object_detection(frame)
 
+        # diplaying the frame
         cv2.imshow(self.window_name, frame)
         cv2.waitKey(3)
 
     def compute_object_detection(self, img):
-        (h, w) = img.shape[:2]
-        blob = cv2.dnn.blobFromImage(cv2.resize(img, (300, 300)), 0.007843, (300, 300), 127.5)
+        (h, w) = img.shape[:2] # image size
+        blob = cv2.dnn.blobFromImage(cv2.resize(img, (300, 300)), 0.007843, (300, 300), 127.5) # raw image
         print("[INFO] computing object detections...")
         self.net.setInput(blob)
-        detections = self.net.forward()
+        detections = self.net.forward() # pass the image through the neural net
 
+        # extracting the outputs of the neural net and overlaying the bounding boxes
         for i in np.arange(0, detections.shape[2]):
             confidence = detections[0, 0, i, 2]
             if confidence > self.args["confidence"]:
