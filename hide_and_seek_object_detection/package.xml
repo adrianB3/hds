@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>hide_and_seek_object_detection</name>
-  <version>0.0.0</version>
+  <version>1.0.0</version>
   <description>The hide_and_seek_object_detection package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
-  <maintainer email="adrianb3@todo.todo">adrianb3</maintainer>
+  <maintainer email="balanescuadrian71@gmail.com">adrianb3</maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->
@@ -50,16 +50,19 @@
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>cv_bridge</build_depend>
-  <build_depend>opencv2sensor_msgs</build_depend>
+  <build_depend>opencv2</build_depend>
   <build_depend>rospy</build_depend>
+  <build_depend>sensor_msgs</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_export_depend>cv_bridge</build_export_depend>
-  <build_export_depend>opencv2sensor_msgs</build_export_depend>
+  <build_export_depend>opencv2</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
   <build_export_depend>std_msgs</build_export_depend>
   <exec_depend>cv_bridge</exec_depend>
-  <exec_depend>opencv2sensor_msgs</exec_depend>
+  <exec_depend>opencv2</exec_depend>
   <exec_depend>rospy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>std_msgs</exec_depend>
 
 

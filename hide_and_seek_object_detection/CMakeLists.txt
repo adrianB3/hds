@@ -71,7 +71,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   opencv2sensor_msgs#   std_msgs
+#   opencv2 sensor_msgs#   std_msgs
 # )
 
 ################################################
@@ -104,10 +104,10 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES hide_and_seek_object_detection
-#  CATKIN_DEPENDS cv_bridge opencv2sensor_msgs rospy std_msgs
-#  DEPENDS system_lib
+  # INCLUDE_DIRS include
+  LIBRARIES hide_and_seek_object_detection
+  CATKIN_DEPENDS cv_bridge opencv2 sensor_msgs rospy std_msgs
+  DEPENDS system_lib
 )
 
 ###########
