@@ -57,7 +57,7 @@ class Detector:
         fpstxt = "FPS: {:.2f}".format(1/time.to_sec())
         cv2.putText(frame, fpstxt ,(20, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (10,255,10) ,1)
         # diplaying the frame
-        cv2.imshow(self.window_name, cv2.resize(frame, (1366,768)))
+        cv2.imshow(self.window_name, cv2.resize(frame, (640,480)))
         cv2.waitKey(1)
         
 
