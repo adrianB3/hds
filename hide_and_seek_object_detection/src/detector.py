@@ -64,6 +64,7 @@ class Detector:
     def compute_object_detection(self, frame):
         (h, w) = frame.shape[:2] # image size
         blob = cv2.dnn.blobFromImage(frame, 0.007843, (200, 200), cv2.mean(frame)) # raw image -> the dnn requires that the images are the same size
+        rospy.loginfo("[INFO] computing object detections...")
         print("[INFO] computing object detections...")
         self.net.setInput(blob)
         detections = self.net.forward() # pass the image through the neural net
