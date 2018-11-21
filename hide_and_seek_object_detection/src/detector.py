@@ -35,37 +35,40 @@ class Detector:
         # self.args = vars(self.ap.parse_args())
         print("[INFO] loading model...")
         # reading the pretrained deep neural net
-        self.net = cv2.dnn.readNetFromCaffe('MobileNetSSD_deploy.prototxt.txt', 'MobileNetSSD_deploy.caffemodel')
+        self.net = cv2.dnn.readNetFromCaffe('/home/adrianb3/catkin_ws/src/hide_and_seek/hide_and_seek_object_detection/src/MobileNetSSD_deploy.prototxt.txt', '/home/adrianb3/catkin_ws/src/hide_and_seek/hide_and_seek_object_detection/src/MobileNetSSD_deploy.caffemodel')
         self.bridge = CvBridge()
         # subscribing to images from ros camera topic
-        self.image_sub = rospy.Subscriber("/camera/image_raw/", Image, self.callback) 
+        self.image_sub = rospy.Subscriber("/camera/image_raw/", Image, self.callback)
+        self.frameCounter = 0
+        self.frame = 0
+        self.fps = 0
 
     def callback(self, data):
-        now = rospy.get_rostime()
+        self.frameCounter+=1
         try:
             # converting to opencv image format
-            frame = self.bridge.imgmsg_to_cv2(data, "bgr8")
+            self.frame = self.bridge.imgmsg_to_cv2(data, "bgr8")
         except CvBridgeError as e:
             print(e)
 
         # actual detection in current frame
-        self.compute_object_detection(frame)
+        self.compute_object_detection(self.frame)
+        
+        fpstxt = "fps: {}".format(self.fps)
+        cv2.putText(self.frame, fpstxt ,(20, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (10,255,10) ,1)
 
-        later = rospy.get_rostime()
-        time = later - now
-
-        fpstxt = "FPS: {:.2f}".format(1/time.to_sec())
-        cv2.putText(frame, fpstxt ,(20, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (10,255,10) ,1)
         # diplaying the frame
-        cv2.imshow(self.window_name, cv2.resize(frame, (640,480)))
+        cv2.imshow(self.window_name, self.frame)
         cv2.waitKey(1)
         
+    def fps_callback(self, event):
+        self.fps = self.frameCounter
+        self.frameCounter = 0
 
     def compute_object_detection(self, frame):
-        (h, w) = frame.shape[:2] # image size
-        blob = cv2.dnn.blobFromImage(frame, 0.007843, (200, 200), cv2.mean(frame)) # raw image -> the dnn requires that the images are the same size
-        rospy.loginfo("[INFO] computing object detections...")
-        print("[INFO] computing object detections...")
+        (h, w) = self.frame.shape[:2] # image size
+        blob = cv2.dnn.blobFromImage(self.frame, 0.007843, (h/3, w/3), cv2.mean(frame)) # raw image -> the dnn requires that the images are the same size
+        rospy.loginfo("computing object detections...\n")
         self.net.setInput(blob)
         detections = self.net.forward() # pass the image through the neural net
 
@@ -77,15 +80,16 @@ class Detector:
                 box = detections[0, 0, i, 3:7] * np.array([w,h,w,h])
                 (startX, startY, endX, endY) = box.astype("int")
                 label = "{}: {:.2f}%".format(CLASSES[idx], confidence*100)
-                print("[INFO] {}".format(label))
-                cv2.rectangle(frame, (startX, startY), (endX, endY), (10,255,10), 1)
+                rospy.loginfo(" {} \n".format(label))
+                cv2.rectangle(self.frame, (startX, startY), (endX, endY), (10,255,10), 1)
                 y = startY - 15 if startY - 15 > 15 else startY + 15
-                cv2.putText(frame, label, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (10,255,10), 1)
+                cv2.putText(self.frame, label, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (10,255,10), 1)
 
 
 def main(args):
     detc = Detector()
     rospy.init_node("object_detector")
+    rospy.Timer(rospy.Duration(1, 0),detc.fps_callback)
     try:
         rospy.spin()
     except KeyboardInterrupt:
