@@ -6,7 +6,7 @@ import sys
 import rospy
 import cv2
 from std_msgs.msg import String
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, CompressedImage
 
 from cv_bridge import CvBridge, CvBridgeError
 
@@ -38,7 +38,7 @@ class Detector:
         self.net = cv2.dnn.readNetFromCaffe('/home/adrianb3/catkin_ws/src/hide_and_seek/hide_and_seek_object_detection/src/MobileNetSSD_deploy.prototxt.txt', '/home/adrianb3/catkin_ws/src/hide_and_seek/hide_and_seek_object_detection/src/MobileNetSSD_deploy.caffemodel')
         self.bridge = CvBridge()
         # subscribing to images from ros camera topic
-        self.image_sub = rospy.Subscriber("/camera/image_raw/", Image, self.callback)
+        self.image_sub = rospy.Subscriber("/camera/image_raw/compressed", CompressedImage, self.callback)
         self.frameCounter = 0
         self.frame = 0
         self.fps = 0
@@ -47,7 +47,7 @@ class Detector:
         self.frameCounter+=1
         try:
             # converting to opencv image format
-            self.frame = self.bridge.imgmsg_to_cv2(data, "bgr8")
+            self.frame = self.bridge.compressed_imgmsg_to_cv2(data, "bgr8")
         except CvBridgeError as e:
             print(e)
 
@@ -67,7 +67,7 @@ class Detector:
 
     def compute_object_detection(self, frame):
         (h, w) = self.frame.shape[:2] # image size
-        blob = cv2.dnn.blobFromImage(self.frame, 0.007843, (h/3, w/3), cv2.mean(frame)) # raw image -> the dnn requires that the images are the same size
+        blob = cv2.dnn.blobFromImage(self.frame, 0.007843, (h/4, w/4), cv2.mean(frame)) # raw image -> the dnn requires that the images are the same size
         rospy.loginfo("computing object detections...\n")
         self.net.setInput(blob)
         detections = self.net.forward() # pass the image through the neural net
