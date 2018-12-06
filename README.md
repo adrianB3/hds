@@ -27,3 +27,13 @@
 * Andrei Maciuca @Andrei98 -> IP, Algo
 
 ActionLib tutorial http://library.isr.ist.utl.pt/docs/roswiki/actionlib_tutorials(2f)Tutorials(2f)Writing(20)a(20)Simple(20)Action(20)Server(20)using(20)the(20)Execute(20)Callback(2028)Python(29).html
+
+Path planner requiadlks;jfalkdshgfrments:
+ - citire harta si convertire in coordonate fata de pozitia robotului
+ - calculare traseu robot astfel:
+    - output: x, y (distante(metri)), yaw(grade) -> creare tip nou de mesaj ros
+    - mai multe tipuri de pathuri 
+                            - parcurgere completa harta
+                            - recalculare dinamica a traseului in functie de pozitia obiectului ce trebuie gasit
+                            - unknown space exploration
+    - pathurile trebuie sa fie diferite pentru hider si seeker
