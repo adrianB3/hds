@@ -25,3 +25,5 @@
 * Krisztina Kis @KKrisztina -> Int, Docs
 * Adrian Balanescu @adrianB3 -> IP, Algo, Int, Nav, Docs
 * Andrei Maciuca @Andrei98 -> IP, Algo
+
+ActionLib tutorial http://library.isr.ist.utl.pt/docs/roswiki/actionlib_tutorials(2f)Tutorials(2f)Writing(20)a(20)Simple(20)Action(20)Server(20)using(20)the(20)Execute(20)Callback(2028)Python(29).html
